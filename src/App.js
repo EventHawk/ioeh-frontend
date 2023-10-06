@@ -1,23 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header';
+import BusinessTable from './components/BusinessTable2'
+import data from './data/data'
+import AppRouter from './Approuter';
+
 
 function App() {
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <AppRouter />
+      {/* <BusinessTable data= {data} /> */}
+     
     </div>
   );
 }
