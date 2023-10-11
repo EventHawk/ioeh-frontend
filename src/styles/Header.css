@@ -1,6 +1,6 @@
 
 header {
-    background-color: blueviolet;
+    background-color: rgb(138, 43, 226);
     display: flex;
     align-items: center;
     height: 100px;
@@ -21,7 +21,53 @@ header {
 
 #header-name {
     flex: 1;
-    text-align: center;
+    text-align: left;
     color: white;
     font-weight: bold;
 }
+
+.navbar-container {
+    background-color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 20px; /* Adjust padding to your preference */
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(141, 161, 176, 0.15);
+}
+
+/* Navbar links styling */
+.navbar-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; 
+  }
+  
+  .navbar-links ul li {
+    margin-right: 20px; /* Adjust margin to your preference */
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+  }
+
+  #logout-button {
+    background-color: #a359e8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  #logout-button:hover {
+    background-color: hsl(271, 76%, 33%); /* Change color on hover */
+  }
+ 

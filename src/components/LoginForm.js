@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({ onLogin , error }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -10,7 +10,7 @@ const LoginForm = ({ onLogin }) => {
   };
 
   return (
-    <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
+    <div className="mt-48 flex justify-center">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
         <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
           Please Log into your account
@@ -55,6 +55,12 @@ const LoginForm = ({ onLogin }) => {
               Login
             </button>
           </div>
+          {/* Display the error message if it exists */}
+          {error && (
+            <div className="mt-4 text-red-500 text-center">
+              {error}
+            </div>
+          )}
         </form>
       </div>
     </div>

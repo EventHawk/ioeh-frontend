@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import LoginForm from '../components/LoginForm';
 
 const Login = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState(''); // Initialize an error state
+
+  const navigate = useNavigate(); // Get the navigate function
 
   const handleLogin = (username, password) => {
     // Add your authentication logic here.
@@ -12,9 +16,12 @@ const Login = () => {
     // For simplicity, we'll simulate successful authentication.
     if (username === 'exampleuser' && password === 'examplepassword') {
       setIsAuthenticated(true);
+      navigate('/dashboard'); // Redirect to the /dashboard route
     } else {
       // Authentication failed, show an error message or handle it as needed.
-      alert('Authentication failed. Please check your username and password.');
+      // alert('Authentication failed. Please check your username and password.');
+      setError('Authentication failed. Please check your username and password.');
+
     }
   };
 
@@ -29,7 +36,7 @@ const Login = () => {
         </div>
       ) : (
         // User is not authenticated, display the login form.
-        <LoginForm onLogin={handleLogin} />
+        <LoginForm onLogin={handleLogin} error={error} />
       )}
     </div>
   );
