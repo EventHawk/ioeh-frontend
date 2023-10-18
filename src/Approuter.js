@@ -17,11 +17,12 @@ const AppRouter = () => {
   return (
       <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/dashboard" element={<TabbedPaper />} />
         {/* Add your protected routes here */}
-        <Route
+        {/* <Route
           path="/dashboard"
           element={isAuthenticated ? <TabbedPaper />: <Navigate to="/login" />}
-        />
+        /> */}
         {/* Redirect to login if the route is not recognized */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>

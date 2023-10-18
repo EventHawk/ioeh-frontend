@@ -8,6 +8,38 @@ const Login = () => {
 
   const navigate = useNavigate(); // Get the navigate function
 
+  // const handleLogin = async (username, password) => {
+  //   // Add your authentication logic here.
+  //   // This is where you would typically make an API request to verify
+  //   // the username and password.
+    
+  //   const apiUrl = 'http://localhost:3000/login';
+
+  //   // For simplicity, we'll simulate successful authentication.
+  //   try {
+  //   const response = await fetch(apiUrl, {
+  //     method: 'POST',
+  //     credentials: 'include',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ username, password }),
+  //   });
+
+  //   if (response.ok) {
+  //     // Authentication was successful
+  //     setIsAuthenticated(true);
+  //     navigate('/dashboard'); // Redirect to the /dashboard route
+  //   } else {
+  //     // Authentication failed, show an error message or handle it as needed.
+  //     setError('Authentication failed. Please check your username and password.');
+  //   }
+  // } catch (error) {
+  //   console.error('Error during authentication:', error);
+  //   setError('Authentication failed due to a network error.');
+  // }
+  // };
+
   const handleLogin = (username, password) => {
     // Add your authentication logic here.
     // This is where you would typically make an API request to verify

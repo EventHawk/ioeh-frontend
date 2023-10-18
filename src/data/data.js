@@ -1,8 +1,8 @@
 const dummyData = [
     {
       id: 1,
-      businessName: 'Business 1',
-      businessEmail: 'business1@example.com',
+      name: 'Business 1',
+      email: 'business1@example.com',
       integrationStatus: 'Active',
     },
     {
