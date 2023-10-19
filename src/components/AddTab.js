@@ -10,7 +10,7 @@ const AddTab = () => {
   });
 
   const [responseUrls, setResponseUrls] = useState([]);
-  const [copySuccess, setCopySuccess] = useState(false);
+  const [copySuccess, setCopySuccess] = useState({});
   const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
@@ -24,10 +24,8 @@ const AddTab = () => {
   const handleSubmit = async () => {
     try {
       // Make a POST request to your API with formData
-      console.log(formData)
       const response = await fetch('http://127.0.0.1:3000/api/front-end/add-integration', {
         method: 'POST',
-        
         body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
@@ -36,22 +34,41 @@ const AddTab = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setResponseUrls([data['token']]);
+        setResponseUrls(data.url);
         setError(null);
       } else {
         const errorData = await response.json();
-        setError(errorData['error']['message']); 
-        console.error('Error:', errorData['error']['message']);
+        setError(errorData['error']['message']);
       }
     } catch (error) {
-      console.error('Error:', error);
+      setError(error);
     }
   };
 
-  const handleCopyToClipboard = (url) => {
-    navigator.clipboard.writeText(url)
-      .then(() => setCopySuccess(true))
+  const handleCopyToClipboard = (urlKey) => {
+    navigator.clipboard.writeText(responseUrls[urlKey])
+      .then(() => {
+        // Set copy success status for the specific URL
+        setCopySuccess((prevCopySuccess) => ({
+          ...prevCopySuccess,
+          [urlKey]: true,
+        }));
+      })
       .catch((err) => console.error('Copy failed:', err));
+  };
+
+
+  const getLabel = (key) => {
+    // Customize the labels based on the key
+    switch (key) {
+      case 'ehWebhookLink':
+        return 'Event Hawk Webhook Link';
+      case 'ioWebhookLink':
+        return 'IO Webhook Link';
+      // Add more cases as needed
+      default:
+        return key;
+    }
   };
 
   return (
@@ -97,22 +114,20 @@ const AddTab = () => {
       <Button variant="contained" onClick={handleSubmit} fullWidth>
         Submit
       </Button>
-      {Array.isArray(responseUrls) ? (
-        responseUrls.map((url, index) => (
-          <Box key={index} mt={2}>
-            <Typography variant="subtitle1">URL {index + 1}:</Typography>
-            <Typography>{url}</Typography>
+      {responseUrls && (
+        Object.entries(responseUrls).map(([key, value]) => (
+          <Box key={key} mt={2}>
+            <Typography variant="subtitle1">{getLabel(key)}:</Typography>
+            <Typography>{value}</Typography>
             <Button
               variant="outlined"
-              onClick={() => handleCopyToClipboard(url)}
+              onClick={() => handleCopyToClipboard(key)}
             >
               Copy URL
-          </Button>
-          {copySuccess && <Typography>URL Copied!</Typography>}
+            </Button>
+            {copySuccess[key] && <Typography>URL Copied!</Typography>}          
           </Box>
         ))
-      ) : (
-        <Typography>No URLs available</Typography>
       )}
     </div>
   );
