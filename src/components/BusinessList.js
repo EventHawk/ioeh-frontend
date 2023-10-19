@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const BusinessList = () => {
+  const navigate = useNavigate();
   const [businesses, setBusinesses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,9 +24,10 @@ const BusinessList = () => {
       });
   }, []);
 
-  const handleEditClick = (businessId) => {
+  const handleEditClick = (email) => {
     // Navigate to the edit page using React Router
     // history.push(`/edit-business/${businessId}`);
+    navigate(`/edit-business?email=${email}`);
   };
 
 
@@ -86,7 +89,7 @@ const BusinessList = () => {
                 <TableCell>{business.business_email }</TableCell>
                 <TableCell>{business.integration_flag}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleEditClick(business.id)}>
+                  <IconButton onClick={() => handleEditClick(business.business_email)}>
                     <EditIcon />
                   </IconButton>
                 </TableCell>
