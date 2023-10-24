@@ -25,7 +25,7 @@ const AddTab = () => {
     try {
       // Make a POST request to your API with formData
       console.log(formData)
-      const response = await fetch('http://127.0.0.1:3000/api/front-end/add-integration', {
+      const response = await fetch('http://localhost:3000/api/front-end/add-integration', {
         method: 'POST',
         
         body: JSON.stringify(formData),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import axios from 'axios';
 
 const BusinessList = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -11,11 +12,12 @@ const BusinessList = () => {
 
   // Fetch business data from your API
   useEffect(() => {
-    fetch('http://127.0.0.1:3000/api/front-end/all-business')
-      .then((response) => response.json())
-      .then((data) => {
-        setBusinesses(data);
-        setFilteredBusinesses(data); // Initialize filtered data with all data
+    axios.get('http://localhost:3000/api/front-end/all-business')
+      // .then((response) => response.json())
+      .then((response) => {
+        console.log(response.data);
+        setBusinesses(response.data);
+        setFilteredBusinesses(response.data); // Initialize filtered data with all data
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -31,18 +33,18 @@ const BusinessList = () => {
   const handleSearch = (e) => {
     const st = e.target.value.toLowerCase().trim(); // Get the input value
     // console.log(st);
-  
+
     if (st) {
       setSearchTerm(st.toLowerCase()); // Set the lowercase version of the search term
       setCurrentPage(1); // Reset to the first page when searching
-      
+
       // Filter the data based on the search term
       const filteredData = businesses.filter((business) =>
-      business.business_name.toLowerCase().includes(st) ||
-      business.business_email.toLowerCase().includes(st)
+        business.business_name.toLowerCase().includes(st) ||
+        business.business_email.toLowerCase().includes(st)
       );
- 
-  
+
+
       // Update the state with the filtered data
       setFilteredBusinesses(filteredData);
     } else {
@@ -83,7 +85,7 @@ const BusinessList = () => {
             {currentItems.map((business) => (
               <TableRow key={business.id}>
                 <TableCell>{business.business_name}</TableCell>
-                <TableCell>{business.business_email }</TableCell>
+                <TableCell>{business.business_email}</TableCell>
                 <TableCell>{business.integration_flag}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEditClick(business.id)}>
