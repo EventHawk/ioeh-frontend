@@ -11,7 +11,6 @@ import EditBusiness from './components/EditBusiness'; // Create this component
 
 
 
-
 const AppRouter = () => {
 
   const isAuthenticated = localStorage.getItem('authToken');
@@ -26,8 +25,9 @@ const AppRouter = () => {
             element={isAuthenticated ? <TabbedPaper />: <Navigate to="/login" />}
           /> */}
           {/* Redirect to login if the route is not recognized */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        {/* <Route path="*" element={<Navigate to="/login" />} /> */}
         <Route path="/edit-business" element={<EditBusiness />} />
+        <Route path="/" element={<Home />} />
       </Routes>
   );
 };
