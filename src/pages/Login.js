@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import LoginForm from '../components/LoginForm';
 import axios from 'axios';
+import { apiBaseUrl } from '../apiConfig';
 
 // axios.defaults.withCredentials=true;
-
 const Login = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(''); // Initialize an error state
@@ -14,8 +14,8 @@ const Login = () => {
   // method no. 2
 
   const handleLogin = async (username, password) => {
-    const apiUrl = 'http://localhost:3000/login';
-    console.log("inside handle login");
+    const apiUrl = apiBaseUrl + '/login';
+    // console.log("inside handle login");
     try {
       await axios.post(apiUrl, {
         username, password

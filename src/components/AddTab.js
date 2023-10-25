@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, CircularProgress } from '@mui/material';
 import axios from 'axios';
+import { apiBaseUrl, frontendApiBaseUrl } from '../apiConfig';
 
 const AddTab = () => {
   const [formData, setFormData] = useState({
@@ -25,12 +26,13 @@ const AddTab = () => {
   };
 
   const handleSubmit = async () => {
+    const apiUrl = frontendApiBaseUrl + '/add-integration';
     try {
       setLoading(true);
       setError(null); 
       console.log(formData);
   
-      const response = await axios.post('http://localhost:3000/api/front-end/add-integration', formData, {
+      const response = await axios.post(apiUrl, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -46,9 +48,6 @@ const AddTab = () => {
         setError(errorData.error.message);
       }
     } catch (error) { 
-
-      
-      console.log("Iam error in catch",error.response.status);
       setError(error.response.data.error.message);
     } finally {
       setLoading(false);

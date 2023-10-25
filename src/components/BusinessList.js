@@ -3,6 +3,7 @@ import { TextField, Table, TableBody, TableCell, TableContainer, TableHead, Tabl
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { apiBaseUrl, frontendApiBaseUrl } from '../apiConfig';
 
 const BusinessList = () => {
   const navigate = useNavigate();
@@ -14,7 +15,8 @@ const BusinessList = () => {
 
   // Fetch business data from your API
   useEffect(() => {
-    axios.get('http://localhost:3000/api/front-end/all-business')
+    const apiUrl = frontendApiBaseUrl + '/all-business';
+    axios.get(apiUrl)
       // .then((response) => response.json())
       .then((response) => {
         console.log(response.data);
@@ -96,9 +98,8 @@ const BusinessList = () => {
                       <Button
                         variant="contained"
                         color="customGreen"
-                        style={{ minWidth: 32, width: 32, height: 32, borderRadius: '50%', marginLeft: '60px' }}
+                        style={{ minWidth: 16, width: 16, height: 16, borderRadius: '10%', marginLeft: '60px' }}
                       >
-                        
                       </Button>
                     </Box>
                   ) : (
@@ -106,9 +107,8 @@ const BusinessList = () => {
                       <Button
                         variant="contained"
                         color="error"
-                        style={{ minWidth: 32, width: 32, height: 32, borderRadius: '50%', marginLeft: '60px' }}
+                        style={{ minWidth: 16, width: 16, height: 16, borderRadius: '10%', marginLeft: '60px' }}
                       >
-                        
                       </Button>
                     </Box>
                   )}

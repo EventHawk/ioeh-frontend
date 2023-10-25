@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Paper, TextField, Button, Typography, useTheme, Box, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-
+import { apiBaseUrl, frontendApiBaseUrl } from '../apiConfig';
 
 const EditBusiness = () => {
   const location = useLocation();
@@ -29,8 +29,9 @@ const EditBusiness = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const apiUrl = frontendApiBaseUrl + `/get-integration?email=${email}`;
       try {
-        const response = await axios.get(`http://localhost:3000/api/front-end/get-integration?email=${email}`);
+        const response = await axios.get(apiUrl);
         const data = response.data;
         setBusinessData({
           id: data.id,
@@ -61,10 +62,11 @@ const EditBusiness = () => {
 
 
   const handleUpdateEHKey = async () => {
+    const apiUrl = frontendApiBaseUrl + '/update-eh-api-key';
     try {
         setLoadingEHKey(true);
         setEHMessage(false);
-        const response = await axios.post('http://localhost:3000/api/front-end/update-eh-api-key', {
+        const response = await axios.post(apiUrl, {
         id: businessData.id, // Replace with actual business ID
         key: businessData.ehKey,
       }, {
@@ -86,10 +88,11 @@ const EditBusiness = () => {
   };
   
   const handleUpdateIOKey = async () => {
+    const apiUrl = frontendApiBaseUrl + '/update-io-api-key';
     try {
         setLoadingIOKey(true);
         setIOMessage(false);
-        const response = await axios.post('http://localhost:3000/api/front-end/update-io-api-key', {
+        const response = await axios.post(apiUrl, {
         id: businessData.id, // Replace with actual business ID
         key: businessData.ioKey,
       }, {
@@ -118,10 +121,11 @@ const EditBusiness = () => {
   };
 
   const handleUpdateIntegrationStatus = async () => {
+    const apiUrl = frontendApiBaseUrl + '/update-integration-status';
     try {
       setLoadingIntegrationstatus(true);
       setIntegrationstatusMessage(false);
-      const response = await axios.post('http://localhost:3000/api/front-end/update-integration-status', {
+      const response = await axios.post(apiUrl, {
         id: businessData.id,
         status: businessData.integrationFlag,
       },{
@@ -217,16 +221,6 @@ const EditBusiness = () => {
           {loadingIOKey ? 'Updating...' : 'Update IO Key'} {/* Show "Updating..." while loadingIOKey is true */}
         </Button>
       </Box>
-      {/* <TextField
-        name="integrationStatus"
-        label="integration status"
-        variant="outlined"
-        fullWidth
-        value={businessData.integrationFlag ? 'On' : 'Off'}
-        onChange={handleInputChange}
-        margin="normal"
-        disabled={loadingIntegrationStatus}
-      /> */}
       <RadioGroup
         name="integrationStatus"
         value={businessData.integrationFlag.toString()}
