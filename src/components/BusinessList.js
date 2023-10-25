@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton } from '@mui/material';
+import { TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton, Box } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -89,7 +89,30 @@ const BusinessList = () => {
               <TableRow key={business.id}>
                 <TableCell>{business.business_name}</TableCell>
                 <TableCell>{business.business_email}</TableCell>
-                <TableCell>{business.integration_flag}</TableCell>
+                {/* <TableCell>{business.integration_flag }</TableCell> */}
+                <TableCell>
+                  {business.integration_flag ? (
+                    <Box display="flex" justifyContent="left">
+                      <Button
+                        variant="contained"
+                        color="customGreen"
+                        style={{ minWidth: 32, width: 32, height: 32, borderRadius: '50%', marginLeft: '60px' }}
+                      >
+                        
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Box display="flex" justifyContent="left">
+                      <Button
+                        variant="contained"
+                        color="error"
+                        style={{ minWidth: 32, width: 32, height: 32, borderRadius: '50%', marginLeft: '60px' }}
+                      >
+                        
+                      </Button>
+                    </Box>
+                  )}
+                </TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEditClick(business.business_email)}>
                     <EditIcon />

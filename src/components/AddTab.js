@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box } from '@mui/material';
+import { TextField, Button, Typography, Box, CircularProgress } from '@mui/material';
+import axios from 'axios';
 
 const AddTab = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const AddTab = () => {
   const [responseUrls, setResponseUrls] = useState([]);
   const [copySuccess, setCopySuccess] = useState({});
   const [error, setError] = useState(null);
+  const [loading, setLoading]  = useState(false);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,26 +26,32 @@ const AddTab = () => {
 
   const handleSubmit = async () => {
     try {
-      // Make a POST request to your API with formData
-      console.log(formData)
-      const response = await fetch('http://localhost:3000/api/front-end/add-integration', {
-        method: 'POST',
-        body: JSON.stringify(formData),
+      setLoading(true);
+      setError(null); 
+      console.log(formData);
+  
+      const response = await axios.post('http://localhost:3000/api/front-end/add-integration', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
-      if (response.ok) {
-        const data = await response.json();
+  
+      if (response.status === 200) {
+        const data = response.data;
         setResponseUrls(data.url);
         setError(null);
       } else {
-        const errorData = await response.json();
-        setError(errorData['error']['message']);
+        const errorData = response.data;
+        // console.log("Iam error",errorData);
+        setError(errorData.error.message);
       }
-    } catch (error) {
-      setError(error);
+    } catch (error) { 
+
+      
+      console.log("Iam error in catch",error.response.status);
+      setError(error.response.data.error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,7 +64,10 @@ const AddTab = () => {
           [urlKey]: true,
         }));
       })
-      .catch((err) => console.error('Copy failed:', err));
+      .catch((err) => {
+        setError('Copy to clipboard failed.');
+        console.error('Copy failed:', err)
+      });
   };
 
 
@@ -83,6 +95,7 @@ const AddTab = () => {
         value={formData.name}
         onChange={handleInputChange}
         margin="normal"
+        disabled={loading}
       />
       <TextField
         name="email"
@@ -92,6 +105,7 @@ const AddTab = () => {
         value={formData.email}
         onChange={handleInputChange}
         margin="normal"
+        disabled={loading}
       />
       <TextField
         name="ehKey"
@@ -101,6 +115,7 @@ const AddTab = () => {
         value={formData.ehKey}
         onChange={handleInputChange}
         margin="normal"
+        disabled={loading}
       />
       <TextField
         name="ioKey"
@@ -110,11 +125,16 @@ const AddTab = () => {
         value={formData.ioKey}
         onChange={handleInputChange}
         margin="normal"
+        disabled={loading}
       />
-      {error && <Typography color="error">{error}</Typography>}
-      <Button variant="contained" onClick={handleSubmit} fullWidth>
-        Submit
-      </Button>
+      {/* {error && <Typography color="error">{error}</Typography>} */}
+      {/* {error ? <Typography color="error">{error}</Typography> : null} */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {error ? <Typography color="error">{error}</Typography> : null}
+        <Button variant="contained" onClick={handleSubmit} fullWidth disabled={loading}>
+          {loading ? <CircularProgress size={24} /> : 'Submit'}
+        </Button>
+      </Box>
       {responseUrls && (
         Object.entries(responseUrls).map(([key, value]) => (
           <Box key={key} mt={2}>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, TextField, Button, Typography, useTheme, Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+
 
 const EditBusiness = () => {
   const location = useLocation();
@@ -18,14 +20,17 @@ const EditBusiness = () => {
   });
   const [ehMessage, setEHMessage] = useState('');
   const [ioMessage, setIOMessage] = useState('');
+  const [loadingIOKey, setLoadingIOKey] = useState(false);
+  const [loadingEHKey, setLoadingEHKey] = useState(false);
+
 
   useEffect(() => {
-    // Make a GET request to fetch business data based on the email
-    fetch(`http://localhost:3000/api/front-end/get-integration?email=${email}`)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/front-end/get-integration?email=${email}`);
+        const data = response.data;
         setBusinessData({
-          id: data.id,  
+          id: data.id,
           businessName: data.businessName,
           businessEmail: data.businessEmail,
           ehKey: data.ehKey,
@@ -34,10 +39,12 @@ const EditBusiness = () => {
           ehWebhookLink: data.url.ehWebhookLink,
           ioWebhookLink: data.url.ioWebhookLink,
         });
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Error fetching data:', error);
-      });
+      }
+    };
+
+    fetchData();
   }, [email]);
 
   const handleInputChange = (e) => {
@@ -59,49 +66,49 @@ const EditBusiness = () => {
 
   const handleUpdateEHKey = async () => {
     try {
-      // Make a PUT request to update the EH Key using the API
-      const response = await fetch('http://localhost:3000/api/front-end/update-eh-api-key', {
-        method: 'POST',
-        body: JSON.stringify({
-          id: businessData.id, // Replace with actual business ID
-          key: businessData.ehKey,
-        }),
+        setLoadingEHKey(true);
+        const response = await axios.post('http://localhost:3000/api/front-end/update-eh-api-key', {
+        id: businessData.id, // Replace with actual business ID
+        key: businessData.ehKey,
+      }, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
-      if (response.ok) {
+  
+      if (response.status === 200) {
         setEHMessage('EH Key updated successfully');
       } else {
         setEHMessage('Error updating EH Key');
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+        setLoadingEHKey(false);
     }
   };
-
+  
   const handleUpdateIOKey = async () => {
     try {
-      // Make a PUT request to update the IO Key using the API
-      const response = await fetch('http://localhost:3000/api/front-end/update-io-api-key', {
-        method: 'POST',
-        body: JSON.stringify({
-          id: businessData.id, // Replace with actual business ID
-          key: businessData.ioKey,
-        }),
+        setLoadingIOKey(true);
+        const response = await axios.post('http://localhost:3000/api/front-end/update-io-api-key', {
+        id: businessData.id, // Replace with actual business ID
+        key: businessData.ioKey,
+      }, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
-      if (response.ok) {
+  
+      if (response.status === 200) {
         setIOMessage('IO Key updated successfully');
       } else {
         setIOMessage('Error updating IO Key');
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+        setLoadingIOKey(false); // Reset loading state after the request is complete
     }
   };
 
@@ -136,6 +143,7 @@ const EditBusiness = () => {
         value={businessData.ehKey}
         onChange={handleInputChange}
         margin="normal"
+        disabled={loadingEHKey}
       />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {ehMessage && (
@@ -143,8 +151,13 @@ const EditBusiness = () => {
                 {ehMessage}
             </Typography>
         )}
-        <Button variant="contained" onClick={handleUpdateEHKey} fullWidth>
-          Update EH Key
+        <Button 
+            variant="contained" 
+            onClick={handleUpdateEHKey} 
+            fullWidth
+            disabled={loadingEHKey} // Disable the button when loadingEHKey is true
+        >
+            {loadingEHKey ? 'Updating...' : 'Update EH Key'} {/* Show "Updating..." while loadingEHKey is true */}
         </Button>
       </Box>
       <TextField
@@ -155,6 +168,7 @@ const EditBusiness = () => {
         value={businessData.ioKey}
         onChange={handleInputChange}
         margin="normal"
+        disabled={loadingIOKey}
       />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {ioMessage && (
@@ -162,8 +176,13 @@ const EditBusiness = () => {
                 {ioMessage}
             </Typography>
         )}
-        <Button variant="contained" onClick={handleUpdateIOKey} fullWidth>
-          Update IO Key
+        <Button 
+            variant="contained" 
+            onClick={handleUpdateIOKey} 
+            fullWidth
+            disabled={loadingIOKey} // Disable the button when loadingIOKey is true
+        >
+          {loadingIOKey ? 'Updating...' : 'Update IO Key'} {/* Show "Updating..." while loadingIOKey is true */}
         </Button>
       </Box>
       <TextField

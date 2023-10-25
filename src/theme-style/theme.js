@@ -9,6 +9,10 @@ const theme = createTheme({
     secondary: {
       main: '#ffffff', // Set your secondary color here
     },
+    customGreen: {
+      main: '#00FF00', // Set your custom green color here
+    },
+
   },
   typography: {
     fontFamily: 'Arial, sans-serif',
