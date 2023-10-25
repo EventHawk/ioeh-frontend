@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, TextField, Button, Typography, useTheme, Box } from '@mui/material';
+import { Paper, TextField, Button, Typography, useTheme, Box, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,14 +14,17 @@ const EditBusiness = () => {
     businessEmail: '',
     ehKey: '',
     ioKey: '',
+    integrationFlag: '',
     updatedAt: '',
     ehWebhookLink: '',
     ioWebhookLink: '',
   });
   const [ehMessage, setEHMessage] = useState('');
   const [ioMessage, setIOMessage] = useState('');
+  const [integrationStatusMessage, setIntegrationstatusMessage] = useState('');
   const [loadingIOKey, setLoadingIOKey] = useState(false);
   const [loadingEHKey, setLoadingEHKey] = useState(false);
+  const [loadingIntegrationStatus, setLoadingIntegrationstatus] = useState(false);
 
 
   useEffect(() => {
@@ -35,6 +38,7 @@ const EditBusiness = () => {
           businessEmail: data.businessEmail,
           ehKey: data.ehKey,
           ioKey: data.ioKey,
+          integrationFlag: data.integrationFlag,
           updatedAt: data.updatedAt,
           ehWebhookLink: data.url.ehWebhookLink,
           ioWebhookLink: data.url.ioWebhookLink,
@@ -55,18 +59,11 @@ const EditBusiness = () => {
     });
   };
 
-  const handleUpdate = async () => {
-    try {
-      // Make a PUT request to update the business data using the API
-      // Use businessData to send the updated fields
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   const handleUpdateEHKey = async () => {
     try {
         setLoadingEHKey(true);
+        setEHMessage(false);
         const response = await axios.post('http://localhost:3000/api/front-end/update-eh-api-key', {
         id: businessData.id, // Replace with actual business ID
         key: businessData.ehKey,
@@ -91,6 +88,7 @@ const EditBusiness = () => {
   const handleUpdateIOKey = async () => {
     try {
         setLoadingIOKey(true);
+        setIOMessage(false);
         const response = await axios.post('http://localhost:3000/api/front-end/update-io-api-key', {
         id: businessData.id, // Replace with actual business ID
         key: businessData.ioKey,
@@ -111,6 +109,40 @@ const EditBusiness = () => {
         setLoadingIOKey(false); // Reset loading state after the request is complete
     }
   };
+
+  const handleIntegrationStatusChange = (event) => {
+    setBusinessData({
+      ...businessData,
+      integrationFlag: event.target.value,
+    });
+  };
+
+  const handleUpdateIntegrationStatus = async () => {
+    try {
+      setLoadingIntegrationstatus(true);
+      setIntegrationstatusMessage(false);
+      const response = await axios.post('http://localhost:3000/api/front-end/update-integration-status', {
+        id: businessData.id,
+        status: businessData.integrationFlag,
+      },{
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        setIntegrationstatusMessage('Integration status updated successfully');
+      } else {
+        setIntegrationstatusMessage('Error updating Integration status');
+      }
+    } catch (error) {
+      console.error('Error:',error);
+    } finally {
+      setLoadingIntegrationstatus(false);
+    }
+  };
+
+
 
   return (
     <Paper elevation={3} sx={{ width: 1100, margin: 'auto', padding: 2 }}>
@@ -183,6 +215,47 @@ const EditBusiness = () => {
             disabled={loadingIOKey} // Disable the button when loadingIOKey is true
         >
           {loadingIOKey ? 'Updating...' : 'Update IO Key'} {/* Show "Updating..." while loadingIOKey is true */}
+        </Button>
+      </Box>
+      {/* <TextField
+        name="integrationStatus"
+        label="integration status"
+        variant="outlined"
+        fullWidth
+        value={businessData.integrationFlag ? 'On' : 'Off'}
+        onChange={handleInputChange}
+        margin="normal"
+        disabled={loadingIntegrationStatus}
+      /> */}
+      <RadioGroup
+        name="integrationStatus"
+        value={businessData.integrationFlag.toString()}
+        onChange={handleIntegrationStatusChange}
+      >
+        <FormControlLabel
+          value="true"
+          control={<Radio />}
+          label="On"
+        />
+        <FormControlLabel
+          value="false"
+          control={<Radio />}
+          label="Off"
+        />
+      </RadioGroup>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {integrationStatusMessage && (
+            <Typography variant="caption" sx={{ color: ioMessage.startsWith('Error') ? 'red' : 'green' }}>
+                {integrationStatusMessage}
+            </Typography>
+        )}
+        <Button 
+            variant="contained" 
+            onClick={handleUpdateIntegrationStatus} 
+            fullWidth
+            disabled={loadingIntegrationStatus} // Disable the button when loadingIOKey is true
+        >
+          {loadingIOKey ? 'Updating...' : 'Update Integration Status'} {/* Show "Updating..." while loadingIOKey is true */}
         </Button>
       </Box>
       <TextField
