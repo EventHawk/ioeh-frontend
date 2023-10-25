@@ -2,11 +2,8 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
-import AddBusiness from './pages/AddBusiness';
-import ViewBusiness from './pages/ViewBusiness';
 import Login from './pages/Login'
-import TabbedPaper from './components/Dashboard'
+import TabbedPaper from './pages/Dashboard'
 import EditBusiness from './components/EditBusiness'; // Create this component
 
 
@@ -27,7 +24,7 @@ const AppRouter = () => {
           {/* Redirect to login if the route is not recognized */}
         {/* <Route path="*" element={<Navigate to="/login" />} /> */}
         <Route path="/edit-business" element={<EditBusiness />} />
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} /> */}
       </Routes>
   );
 };
