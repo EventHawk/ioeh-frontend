@@ -2,21 +2,23 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './components/Header';
 import AppRouter from './Approuter';
-import { BrowserRouter as Router } from 'react-router-dom'; // Import Router
+import { BrowserRouter} from 'react-router-dom'; // Import Router
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 axios.defaults.withCredentials=true;
 
+
 function App() {
 
-  
   return (
-    <Router>
       <div className="App">
+      <BrowserRouter>
         <Header />
-        <AppRouter />      
+        <AppRouter />
+      </BrowserRouter>
       </div>
-    </Router>
+   
   );
 }
 

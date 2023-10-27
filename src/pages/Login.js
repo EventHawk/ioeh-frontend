@@ -1,95 +1,67 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import React, { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import axios from 'axios';
 import { apiBaseUrl } from '../apiConfig';
+import { useLogin } from '../LoginProvider';
 
-// axios.defaults.withCredentials=true;
+function setCookie(name, value, days) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+
 const Login = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState(''); // Initialize an error state
-
-  const navigate = useNavigate(); // Get the navigate function
-
-  // method no. 2
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { isLoggedIn,setIsLoggedIn } = useLogin();
 
   const handleLogin = async (username, password) => {
     const apiUrl = apiBaseUrl + '/login';
-    // console.log("inside handle login");
+    
     try {
-      await axios.post(apiUrl, {
-        username, password
-      })
-        .then((response) => {
-          console.log(response);
-          navigate('/dashboard');
-        });
+      const response = await axios.post(apiUrl, {
+        username,
+        password,
+      });
+
+      if (response.status === 200) {
+        // If the login is successful, update the 'connect.sid' cookie
+        // document.cookie = 'connect.sid=' + response.data.sessionId;
+        setIsLoggedIn(true); 
+        console.log("status is ok");
+        setTimeout(() => {
+          setCookie('authenticated', true, 1);
+        }, 1000);
+        setTimeout(() => {
+          // window.location.reload(true);
+
+        }, 1500); 
+        // // window.location.reload(true);
+        // setIsAuthenticated(true);
+        // navigate('/dashboard', { replace: true }); 
+      } else {
+        setError('Authentication failed. Please check your username and password.');
+      }
     } catch (err) {
       console.error(err);
       setError('Authentication failed due to a network error.');
     }
-  }
+  };
 
-  // const handleLogin = async (username, password) => {
-  //   // Add your authentication logic here.
-  //   // This is where you would typically make an API request to verify
-  //   // the username and password.
-
-  //   const apiUrl = 'http://localhost:3000/login';
-
-  //   // For simplicity, we'll simulate successful authentication.
-  //   try {
-  //   const response = await fetch(apiUrl, {
-  //     method: 'POST',
-  //     credentials: 'include',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ username, password }),
-  //   });
-
-  //   if (response.ok) {
-  //     // Authentication was successful
-  //     setIsAuthenticated(true);
-  //     navigate('/dashboard'); // Redirect to the /dashboard route
-  //   } else {
-  //     // Authentication failed, show an error message or handle it as needed.
-  //     setError('Authentication failed. Please check your username and password.');
-  //   }
-  // } catch (error) {
-  //   console.error('Error during authentication:', error);
-  //   setError('Authentication failed due to a network error.');
-  // }
-  // };
-
-  // const handleLogin = (username, password) => {
-  //   // Add your authentication logic here.
-  //   // This is where you would typically make an API request to verify
-  //   // the username and password.
-
-  //   // For simplicity, we'll simulate successful authentication.
-  //   if (username === 'exampleuser' && password === 'examplepassword') {
-  //     setIsAuthenticated(true);
-  //     navigate('/dashboard'); // Redirect to the /dashboard route
-  //   } else {
-  //     // Authentication failed, show an error message or handle it as needed.
-  //     // alert('Authentication failed. Please check your username and password.');
-  //     setError('Authentication failed. Please check your username and password.');
-
-  //   }
-  // };
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/dashboard');
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <div>
-      {isAuthenticated ? (
-        // User is authenticated, display authenticated content or redirect
-        // to the dashboard.
-        <div>
-          <h2>Welcome, User!</h2>
-          {/* Add authenticated content here */}
-        </div>
+      {isLoggedIn ? (
+        navigate('/dashboard') 
       ) : (
-        // User is not authenticated, display the login form.
         <LoginForm onLogin={handleLogin} error={error} />
       )}
     </div>

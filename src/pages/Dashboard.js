@@ -3,7 +3,7 @@ import { Paper, TextField, Button, Typography, Box, useTheme } from '@mui/materi
 import ViewTab from '../components/ViewTab'; // Import the ViewTab component
 import AddTab from '../components/AddTab';   // Import the AddTab component
 
-const TabbedPaper = () => {
+const Dashboard = () => {
   const theme = useTheme();
   const [activeTab, setActiveTab] = useState('view');
   const [addedText, setAddedText] = useState([]);
@@ -46,4 +46,4 @@ const TabbedPaper = () => {
   );
 };
 
-export default TabbedPaper;
+export default Dashboard;
