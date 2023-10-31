@@ -12,7 +12,7 @@ const EditBusiness = () => {
     id: '',
     businessName: '',
     businessEmail: '',
-    quoteUrl: '',
+    websiteUrl: '',
     ehKey: '',
     ioKey: '',
     integrationFlag: '',
@@ -38,7 +38,7 @@ const EditBusiness = () => {
           id: data.id,
           businessName: data.businessName,
           businessEmail: data.businessEmail,
-          quoteUrl: data.quoteUrl,
+          websiteUrl: data.websiteUrl,
           ehKey: data.ehKey,
           ioKey: data.ioKey,
           integrationFlag: data.integrationFlag,
@@ -174,11 +174,11 @@ const EditBusiness = () => {
         disabled
       />
       <TextField
-        name="quoteUrl"
-        label="Quote Url"
+        name="websiteUrl"
+        label="Website Url"
         variant="outlined"
         fullWidth
-        value={businessData.quoteUrl}
+        value={businessData.websiteUrl}
         margin="normal"
         disabled
       />

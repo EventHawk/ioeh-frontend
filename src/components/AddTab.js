@@ -7,7 +7,7 @@ const AddTab = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    quoteUrl: '',
+    websiteUrl: '',
     ehKey: '',
     ioKey: '',
   });
@@ -108,11 +108,11 @@ const AddTab = () => {
         disabled={loading}
       />
       <TextField
-        name="quoteUrl"
+        name="websiteUrl"
         label="Website URL"
         variant="outlined"
         fullWidth
-        value={formData.quoteUrl}
+        value={formData.websiteUrl}
         onChange={handleInputChange}
         margin="normal"
         disabled={loading}
