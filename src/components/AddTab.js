@@ -8,7 +8,6 @@ const AddTab = () => {
     name: '',
     email: '',
     websiteUrl: '',
-    ehKey: '',
     ioKey: '',
   });
 
@@ -113,16 +112,6 @@ const AddTab = () => {
         variant="outlined"
         fullWidth
         value={formData.websiteUrl}
-        onChange={handleInputChange}
-        margin="normal"
-        disabled={loading}
-      />
-      <TextField
-        name="ehKey"
-        label="EH Key"
-        variant="outlined"
-        fullWidth
-        value={formData.ehKey}
         onChange={handleInputChange}
         margin="normal"
         disabled={loading}
